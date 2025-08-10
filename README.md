@@ -64,6 +64,82 @@ for r in results[:5]:
 - [ ] CLI support
 - [ ] Integration with Great Expectations / Soda
 
+## Future Plan
+
+KeySense is in its early stages. The following features and improvements are planned:
+
+### 1. Core Enhancements
+- **Sampling Support** — Enable fast uniqueness scans on very large datasets by sampling rows while maintaining statistical accuracy.
+- **Heuristic-Driven Column Selection** — Automatically prioritize likely ID columns based on name patterns and data distribution.
+- **Configurable Scoring Weights** — Allow users to adjust the weight of uniqueness, stability, and null coverage in the Grain Score calculation.
+
+### 2. Performance & Scalability
+- **Approximate Distinct Counts** — Use `approx_count_distinct` for large datasets to speed up evaluations.
+- **Parallel Combo Evaluation** — Leverage Spark's parallelism for faster multi-column scans.
+- **Adaptive Combo Pruning** — Stop scanning combos that already fail uniqueness thresholds.
+
+### 3. Usability Improvements
+- **Command-Line Interface (CLI)** — Run grain detection directly from the terminal:  
+  ```bash
+  keysense scan --table events --time-col event_date
+  ```
+- **Result Export** — Output ranked keys to CSV, Parquet, or a metadata table.
+- **Integration Hooks** — Easily connect with data quality tools like Great Expectations or Soda.
+
+### 4. Extended Compatibility
+- **Redshift & SQL Integration** — Push down grain detection logic into Redshift/Snowflake for smaller datasets.
+- **Delta Lake / Iceberg Support** — Work seamlessly with modern data lake formats.
+
+### 5. Community & Collaboration
+- **Public Benchmarks** — Compare performance and accuracy on open datasets like NYC Taxi Trips.
+- **Example Notebooks** — Demonstrations with synthetic and real datasets.
+- **Contributor Guide** — Clear documentation for adding new features or optimizations.
+
+## Project Strategy & Full Roadmap
+
+**KeySense** is an open-source PySpark utility for detecting the record identity (grain) of a dataset by scanning up to 4-column combinations and scoring them based on uniqueness ratio, drift stability, and null coverage.
+
+### Phase 1: Foundations
+- Package minimal PySpark module.
+- Implement combination scanning up to 4 columns.
+- Add stability checks across a time column (default `event_date`).
+- Return ranked results with Grain Score and diagnostics.
+
+### Phase 2: Performance & Ergonomics
+- Add sampling for large datasets.
+- Heuristics to prioritize likely key columns.
+- Filter out high-null or low-cardinality columns.
+- Fingerprinting for duplicate detection.
+
+### Phase 3: Integrations & Developer Experience
+- Implement CLI.
+- Export results to metadata tables.
+- Create example notebooks using open datasets like NYC Taxi.
+- Provide integration recipes with data quality tools like Great Expectations or Soda.
+
+### Future Plans
+- Configurable scoring weights for uniqueness, stability, and null coverage.
+- Approximate distinct counts for scalability.
+- Parallelized combo evaluation.
+- Adaptive combo pruning for efficiency.
+- Integration with Redshift/Snowflake for smaller datasets.
+- Support for Delta Lake and Apache Iceberg.
+- Public performance benchmarks.
+- Contributor guide and community engagement via GitHub issues/PRs.
+
+### Publishing Roadmap
+1. Launch article introducing KeySense, the problem of grain detection, and why it's needed.
+2. Technical deep dive article on the algorithm and design choices.
+3. Case study showing grain drift detection.
+4. Opinion piece critiquing existing data quality frameworks and how KeySense fills the gap.
+5. Integration-focused article showing how to use KeySense with existing DQ frameworks.
+6. Community call-to-action for contributors.
+7. Benchmark results at scale.
+8. Concept-defining piece on "grain drift."
+
+This roadmap is designed for iterative development, public feedback, and long-term adoption in the data engineering community.
+
+
 ## Contributing
 Issues and pull requests are welcome!  
 Open an issue with ideas, bugs, or feature requests.
