@@ -64,6 +64,69 @@ for r in results[:5]:
 - [ ] CLI support
 - [ ] Integration with Great Expectations / Soda
 
+## Visual Overview (Healthcare Example)
+
+### Flowchart – How KeySense Works
+```mermaid
+
+flowchart TD
+    A["Dataset: patient_id, visit_id, diagnosis_code, doctor_id, admission_date"]:::src
+    B["Heuristic filter: drop high nulls; drop very low cardinality; boost id/uuid fields"]:::step
+    C["Generate column combos (1..4)"]:::step
+    D["Compute metrics: uniqueness ratio; stability over time; null coverage"]:::metric
+    E["Grain score = 0.50*uniqueness + 0.30*stability + 0.20*(1 - null)"]:::score
+    F["Ranked candidates: top K combos with notes"]:::out
+
+    A --> B --> C --> D --> E --> F
+
+    classDef src fill:#6EE7B7,stroke:#0F766E,stroke-width:2px,color:#064E3B;
+    classDef step fill:#BFDBFE,stroke:#1E3A8A,stroke-width:2px,color:#0B1F44;
+    classDef metric fill:#FDE68A,stroke:#92400E,stroke-width:2px,color:#78350F;
+    classDef score fill:#FCA5A5,stroke:#7F1D1D,stroke-width:2px,color:#450A0A;
+    classDef out fill:#C4B5FD,stroke:#4C1D95,stroke-width:2px,color:#2E1065;
+
+```
+
+### Candidate Keys – Example Scoring
+```mermaid
+
+graph LR
+  subgraph Columns
+    P["patient_id"]:::col
+    V["visit_id"]:::col
+    DG["diagnosis_code"]:::col
+    DR["doctor_id"]:::col
+    AD["admission_date"]:::col
+  end
+
+  subgraph Candidate_Keys_scored
+    K1["patient_id + visit_id + admission_date | Grain Score: 0.996"]:::best
+    K2["patient_id + admission_date | Grain Score: 0.987"]:::good
+    K3["visit_id + doctor_id | Grain Score: 0.976"]:::ok
+    K4["patient_id | Grain Score: 0.860"]:::warn
+  end
+
+  P --> K1
+  V --> K1
+  AD --> K1
+
+  P --> K2
+  AD --> K2
+
+  V --> K3
+  DR --> K3
+
+  P --> K4
+
+  classDef col fill:#93C5FD,stroke:#1D4ED8,stroke-width:2px,color:#0B1F44;
+  classDef best fill:#34D399,stroke:#065F46,stroke-width:3px,color:#064E3B;
+  classDef good fill:#A7F3D0,stroke:#10B981,stroke-width:2px,color:#064E3B;
+  classDef ok fill:#FDE68A,stroke:#D97706,stroke-width:2px,color:#78350F;
+  classDef warn fill:#FCA5A5,stroke:#B91C1C,stroke-width:2px,color:#450A0A;
+
+
+```
+
 ## Future Plan
 
 KeySense is in its early stages. The following features and improvements are planned:
