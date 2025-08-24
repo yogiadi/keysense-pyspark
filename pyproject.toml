@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keysense"
+version = "0.4.2"
+description = "KeySense: detect and score dataset grain (candidate keys) in PySpark"
+authors = [
+  { name="Aditya Yogi" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "pyspark>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yogiadi/keysense-pyspark"
